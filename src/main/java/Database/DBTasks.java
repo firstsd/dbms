@@ -1,4 +1,4 @@
-package mum.edu.Database;
+package Database;
 
 public class DBTasks extends Database {
 

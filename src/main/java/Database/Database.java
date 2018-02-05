@@ -1,4 +1,4 @@
-package mum.edu.Database;
+package Database;
 
 import java.io.Closeable;
 import java.sql.CallableStatement;

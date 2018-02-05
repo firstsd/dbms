@@ -1,4 +1,4 @@
-package mum.edu.Database;
+package Database;
 
 import java.sql.*;
 import java.util.Enumeration;
