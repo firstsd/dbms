@@ -12,53 +12,73 @@ import javafx.scene.control.Alert.AlertType;
 
 public class DBSingleton extends Database {
 
-	private final String url;
+    private final String url;
 //	private final String username;
 //	private final String password;
 
-	DBSingleton(String url) {
-		this.url = url;
+    DBSingleton(String url) {
+        this.url = url;
 //		this.username = username;
 //		this.password = password;
-	}
+    }
 
-	@Override
-	void connect() throws Exception {
-		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		conn = DriverManager.getConnection(url);
-	}
+    @Override
+    void connect() throws Exception {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        conn = DriverManager.getConnection(url);
+    }
 
-	private void checkConn() throws Exception {
-		if (conn == null || conn.isClosed()) {
-			connect();
-		}
-	}
+    private void checkConn() throws Exception {
+        if (conn == null || conn.isClosed()) {
+            connect();
+        }
+    }
 
-	public List<Staff> getStaffs(){
-		List<Staff> ret = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		final String sql = "select * from staff";
-		List<Object> params = new ArrayList<Object>();
-		try {
-			checkConn();
-			ps = preparedStatement(sql, params.toArray());
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				if (ret == null) {
-					ret = new ArrayList();
-				}
-				Staff staff = new Staff(rs.getInt("staffID"), rs.getString("staffName"));
-				ret.add(staff);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			close(ps);
-			close(rs);
-		}
-		return ret;
-	}
+    public List<Staff> getStaffs() {
+        List<Staff> ret = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "select * from staff";
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                if (ret == null) {
+                    ret = new ArrayList();
+                }
+                Staff staff = new Staff(rs.getInt("staffID"), rs.getString("staffName"));
+                ret.add(staff);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(ps);
+            close(rs);
+        }
+        return ret;
+    }
+
+
+
+    public String exportRate() {
+        String ret = null;
+        PreparedStatement ps = null;
+        final String sql = "EXEC dbo.exportCurrentRate";
+        try {
+            checkConn();
+            ps = preparedStatement(sql);
+            if (ps.executeUpdate() > 0) {
+                ret = "success";
+            }
+        } catch (Exception e) {
+            ret = e.getMessage();
+        } finally {
+            close(ps);
+        }
+        return ret;
+    }
 
 //	public List<Course> getCourseList() {
 //		List<Course> ret = null;
