@@ -10,8 +10,8 @@ public class DBtest {
     public List<Staff> test() {
 
         // Create a variable for the connection string.
-        String connectionUrl = "jdbc:sqlserver://10.10.11.165:1433;databaseName=telephoneCompany;user=dbms;password=Dbms_123";
-
+//        String connectionUrl = "jdbc:sqlserver://10.10.11.165:1433;databaseName=telephoneCompany;user=dbms;password=Dbms_123";
+        String connectionUrl = "jdbc:sqlserver://10.0.0.26:1433;databaseName=telephoneCompany;user=dbms;password=Dbms_123";
         // Declare the JDBC objects.
         Connection con = null;
         Statement stmt = null;
@@ -33,8 +33,8 @@ public class DBtest {
                     ret = new ArrayList<Staff>();
                 }
 
-                ret.add(new Staff(rs.getInt("ID"), rs.getString("staffName")));
-                System.out.println((rs.getString("ID") + " " + rs.getString("staffName")));
+                ret.add(new Staff(rs.getInt("staffID"), rs.getString("staffName")));
+                System.out.println((rs.getString("staffID") + " " + rs.getString("staffName")));
             }
         }
 

@@ -1,5 +1,6 @@
 package entity;
 
+import java.sql.Time;
 import java.util.Date;
 
 public class Call {
@@ -7,11 +8,12 @@ public class Call {
     private CallingCode fromCode;
     private CallingCode toCode;
     private Customer fromPhonel;
-    private Customer toPhoneNo;
+    private String toPhoneNo;
     private Double duration;
     private Date callDate;
+    private Time callTime;
 
-    public Call(Integer callID, CallingCode fromCode, CallingCode toCode, Customer fromPhonel, Customer toPhoneNo, Double duration, Date callDate) {
+    public Call(Integer callID, CallingCode fromCode, CallingCode toCode, Customer fromPhonel, String toPhoneNo, Double duration, Date callDate, Time callTime) {
         this.callID = callID;
         this.fromCode = fromCode;
         this.toCode = toCode;
@@ -19,6 +21,7 @@ public class Call {
         this.toPhoneNo = toPhoneNo;
         this.duration = duration;
         this.callDate = callDate;
+        this.callTime = callTime;
     }
 
     public Integer getCallID() {
@@ -53,11 +56,11 @@ public class Call {
         this.fromPhonel = fromPhonel;
     }
 
-    public Customer getToPhoneNo() {
+    public String getToPhoneNo() {
         return toPhoneNo;
     }
 
-    public void setToPhoneNo(Customer toPhoneNo) {
+    public void setToPhoneNo(String toPhoneNo) {
         this.toPhoneNo = toPhoneNo;
     }
 
@@ -75,5 +78,13 @@ public class Call {
 
     public void setCallDate(Date callDate) {
         this.callDate = callDate;
+    }
+
+    public Time getCallTime() {
+        return callTime;
+    }
+
+    public void setCallTime(Time callTime) {
+        this.callTime = callTime;
     }
 }

@@ -48,7 +48,7 @@ public class DBSingleton extends Database {
 				if (ret == null) {
 					ret = new ArrayList();
 				}
-				Staff staff = new Staff(rs.getInt("ID"), rs.getString("staffName"));
+				Staff staff = new Staff(rs.getInt("staffID"), rs.getString("staffName"));
 				ret.add(staff);
 			}
 		} catch (Exception e) {

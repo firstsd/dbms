@@ -30,10 +30,12 @@ public class CustomerServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-//        DBTasks db = new DBTasks();
-        DBtest db = new DBtest();
-        List<Staff> staffs = db.test();
+        List<Staff> staffs = DBSingletonFactory.getInstanceDB().getStaffs();
         System.out.println(staffs);
+
+        //DBtest db = new DBtest();
+        //List<Staff> staffs = db.test();
+        //System.out.println(staffs);
 
 //        System.out.println(staffs);
 
