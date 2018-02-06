@@ -7,3 +7,23 @@ body {
     font-family: Tahoma;
     font-size: 12px;
 }
+
+div {
+    margin: 10px;
+    padding: 10px;
+    background: #EDEDED;
+    border-radius: 5px;
+    width: 300px;
+}
+
+a {
+    color: darkblue;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+    color: red;
+}

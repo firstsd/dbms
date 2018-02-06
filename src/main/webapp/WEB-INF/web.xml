@@ -8,8 +8,32 @@
         <servlet-name>Customer servlet</servlet-name>
         <servlet-class>Servlet.CustomerServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Report servlet</servlet-name>
+        <servlet-class>Servlet.ReportServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Bill servlet</servlet-name>
+        <servlet-class>Servlet.BillServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Rate servlet</servlet-name>
+        <servlet-class>Servlet.RateServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Customer servlet</servlet-name>
         <url-pattern>/customer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Report servlet</servlet-name>
+        <url-pattern>/report</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Bill servlet</servlet-name>
+        <url-pattern>/bill</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Rate servlet</servlet-name>
+        <url-pattern>/rate</url-pattern>
     </servlet-mapping>
 </web-app>
