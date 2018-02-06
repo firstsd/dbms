@@ -10,7 +10,8 @@ public class DBconnector {
     private DBconnector() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conn = DriverManager.getConnection("jdbc:sqlserver://10.0.0.26:1433;databaseName=telephoneCompany;user=dbms;password=Dbms_123");
+//            conn = DriverManager.getConnection("jdbc:sqlserver://10.0.0.26:1433;databaseName=telephoneCompany;user=dbms;password=Dbms_123");
+            conn = DriverManager.getConnection("jdbc:sqlserver://10.10.11.165:1433;databaseName=telephoneCompany;user=dbms;password=Dbms_123");
         } catch (Exception e) {
             e.printStackTrace();
         }
