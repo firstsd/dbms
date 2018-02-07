@@ -204,6 +204,32 @@ public class DBSingleton extends Database {
         return ret;
     }
 
+    public List<ProcessCall> getCalls() {
+        List<ProcessCall> ret = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "SELECT callID, co.countryName as fromCountry, co2.countryName as toCountry, fromPhoneNo, toPhoneNo, duration, callDate, callTime FROM calls ca, callingCode co, callingCode co2 WHERE ca.fromCode = co.countryCode and ca.toCode = co2.countryCode";
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                if (ret == null) {
+                    ret = new ArrayList<ProcessCall>();
+                }
+                ProcessCall processCall = new ProcessCall(rs.getInt("callID"), rs.getString("fromCountry"), rs.getString("toCountry"), rs.getString("fromPhoneNo"), rs.getString("toPhoneNo"), rs.getInt("duration"), rs.getDate("callDate"), rs.getTime("callTime"));
+                ret.add(processCall);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(rs);
+            close(ps);
+        }
+        return ret;
+    }
+
     public String exportTrafficSummary(String startDate, String endDate) {
         String ret = null;
         PreparedStatement ps = null;
@@ -261,22 +287,22 @@ public class DBSingleton extends Database {
     public String updateRate(String filename, String tablename, String sheetName) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.importExcel_to_SQL '" + sheetName + "$', '" + filename + "', '" + tablename + "'";
+        ResultSet rs = null;
+        final String sql = "exec dbo.importExcel_to_SQL " + sheetName + "$, '" + filename + "', " + tablename + ";";
         try {
             checkConn();
+            ret = sql;
             ps = preparedStatement(sql);
-            ret = sql;
-            if (ps.executeUpdate() > 0) {
-                ret = "success";
-            }
+            int a = ps.executeUpdate();
+                ret += String.valueOf(a);
         } catch (Exception e) {
-//            ret = e.getMessage();
-            ret = sql;
+            ret = e.getMessage();
         } finally {
             close(ps);
         }
         return ret;
     }
+
 
     public String addCustomer(Customer customer) {
         String ret = null;

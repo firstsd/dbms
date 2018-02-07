@@ -45,15 +45,19 @@ public class RateServlet extends HttpServlet {
                     System.out.println("=> " + sheet.getSheetName());
                     String result = DBSingletonFactory.getInstanceDB().updateRate(fullpath, "rate", sheet.getSheetName());
                     if (result == null) {
+                        errorList.add(result);
                         request.setAttribute("importError", "There is no records found");
                         request.setAttribute("importErrorType", 1);
                     } else if (result.equals("success")) {
+                        errorList.add(result);
                         request.setAttribute("importError", "File exported successfully!!");
                         request.setAttribute("importErrorType", 0);
                     } else {
+                        errorList.add(result);
                         request.setAttribute("importError", result);
                     }
                 }
+                System.out.println(errorList);
             } catch (InvalidFormatException e) {
                 e.printStackTrace();
             }

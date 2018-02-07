@@ -59,17 +59,18 @@
             <td>offPeak</td>
             <td>changeDate</td>
         </tr>
-        <c:forEach var="ratetmp" items="${rateTmpList}">
+        <c:forEach var="calls" items="${rateTmpList}">
             <tr>
-                <td>${ratetmp.rateID}</td>
-                <td>${ratetmp.serviceName}</td>
-                <td>${ratetmp.sourceName}</td>
-                <td>${ratetmp.destName}</td>
-                <td>${ratetmp.peak}</td>
-                <td>${ratetmp.offPeak}</td>
-                <td>${ratetmp.changeDate}</td>
+                <td>${calls.rateID}</td>
+                <td>${calls.serviceName}</td>
+                <td>${calls.sourceName}</td>
+                <td>${calls.destName}</td>
+                <td>${calls.peak}</td>
+                <td>${calls.offPeak}</td>
+                <td>${calls.changeDate}</td>
             </tr>
         </c:forEach>
     </table>
+</div>
 </body>
 </html>
