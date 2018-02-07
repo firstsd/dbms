@@ -82,8 +82,6 @@ public class Rate {
         return changeDate;
     }
 
-
-
     public void setChangeDate(Date changeDate) {
         this.changeDate = changeDate;
     }

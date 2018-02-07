@@ -18,6 +18,14 @@ public class Customer {
         this.address = address;
         this.countryCode = countryCode;
     }
+    public Customer(String fName, String lName, String phoneNo, Service service, String address, CallingCode countryCode) {
+        this.fName = fName;
+        this.lName = lName;
+        this.phoneNo = phoneNo;
+        this.service = service;
+        this.address = address;
+        this.countryCode = countryCode;
+    }
 
     public Integer getCustID() {
         return custID;

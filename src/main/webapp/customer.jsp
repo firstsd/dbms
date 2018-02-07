@@ -16,16 +16,22 @@
 <hr/>
 <h3>Customer List</h3>
 <hr/>
-    <form method="post" action="">
+    <form method="post" action="/customer">
         <fieldset>
             <legend>ADD CUSTOMER</legend>
             <input type="text" placeholder="First name" name="fName"><br>
             <input type="text" placeholder="Last name" name="lName"><br>
+            <label>Calling from &nbsp;</label>
+            <select name="country">
+                <c:forEach var="country" items="${countries}">
+                    <option value="${country.countryCode}"> ${country.countryName} </option>
+                </c:forEach>
+            </select><br>
             <input type="text" placeholder="Phone number" name="phone"><br>
             <label>Services &nbsp;</label>
             <select name="service">
                 <c:forEach var="item" items="${Service}">
-                    <option value="${item}"> ${item} </option>
+                    <option value="${item.serviceId}"> ${item.serviceName} </option>
                 </c:forEach>
             </select><br>
             <input type="text" placeholder="Address" name="address"><br>

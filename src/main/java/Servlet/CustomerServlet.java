@@ -2,6 +2,9 @@ package Servlet;
 
 import Database.DBSingleton;
 import Database.DBSingletonFactory;
+import entity.CallingCode;
+import entity.Customer;
+import entity.Service;
 import entity.Staff;
 import org.omg.CORBA.Request;
 
@@ -18,13 +21,19 @@ import java.util.List;
 @WebServlet(name = "CustomerServlet")
 public class CustomerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer staffID = 2;
         String firstName = request.getParameter("fName");
-        String lastName = request.getParameter("lname");
+        String lastName = request.getParameter("lName");
+        String callingCode = request.getParameter("country");
+        CallingCode country = DBSingletonFactory.getInstanceDB().getCountry(callingCode);
         String phone = request.getParameter("phone");
-        String service = request.getParameter("service");
+        String serviceID = request.getParameter("service");
+        Service service = DBSingletonFactory.getInstanceDB().getService(serviceID);
         String address = request.getParameter("address");
-        System.out.println(firstName);
-        System.out.println(service);
+
+        Customer customer = new Customer(staffID, firstName, lastName, phone, service, address, country);
+        String checkStatus = DBSingletonFactory.getInstanceDB().addCustomer(customer);
+        System.out.println(checkStatus);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,14 +47,10 @@ public class CustomerServlet extends HttpServlet {
 
 //        System.out.println(staffs);
 
-        List<String> service = new ArrayList<String>();
-        service.add("Spectra");
-        service.add("VOIP");
-        service.add("Delux");
-        service.add("GACB");
-        service.add("Budget");
-
+        List<Service> service = DBSingletonFactory.getInstanceDB().getServices();
+        List<CallingCode> countries = DBSingletonFactory.getInstanceDB().getCountries();
         request.setAttribute("Service", service);
+        request.setAttribute("countries", countries);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("customer.jsp");
         dispatcher.forward(request, response);

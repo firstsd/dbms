@@ -2,11 +2,11 @@ package entity;
 
 public class CallingCode {
     private Integer countryCode;
-    private String CountryName;
+    private String countryName;
 
     public CallingCode(Integer countryCode, String countryName) {
         this.countryCode = countryCode;
-        CountryName = countryName;
+        this.countryName = countryName;
     }
 
     public Integer getCountryCode() {
@@ -18,10 +18,10 @@ public class CallingCode {
     }
 
     public String getCountryName() {
-        return CountryName;
+        return countryName;
     }
 
     public void setCountryName(String countryName) {
-        CountryName = countryName;
+        this.countryName = countryName;
     }
 }

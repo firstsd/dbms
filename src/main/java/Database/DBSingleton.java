@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.CallingCode;
-import entity.Rate;
-import entity.RateTmp;
+import entity.Customer;
+import entity.Service;
 import entity.Staff;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -16,13 +16,9 @@ import javafx.scene.control.Alert.AlertType;
 public class DBSingleton extends Database {
 
     private final String url;
-//	private final String username;
-//	private final String password;
 
     DBSingleton(String url) {
         this.url = url;
-//		this.username = username;
-//		this.password = password;
     }
 
     @Override
@@ -63,11 +59,11 @@ public class DBSingleton extends Database {
         return ret;
     }
 
-    public List<RateTmp> getRates() {
-        List<RateTmp> ret = null;
+    public List<CallingCode> getCountries() {
+        List<CallingCode> ret = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        final String sql = "SELECT rateID, s.serviceName, f.countryName AS fromCountry, d.countryName AS toCountry, peak, offPeak, changeDate FROM rate r, service s, callingCode f, callingCode d WHERE r.serviceID = s.serviceID and r.fromCode = f.countryCode and r.destCode = d.countryCode";
+        final String sql = "select * from callingCode";
         List<Object> params = new ArrayList<Object>();
         try {
             checkConn();
@@ -75,24 +71,112 @@ public class DBSingleton extends Database {
             rs = ps.executeQuery();
             while (rs.next()) {
                 if (ret == null) {
-                    ret = new ArrayList<RateTmp>();
+                    ret = new ArrayList();
                 }
-                RateTmp rateTmp = new RateTmp(rs.getInt("rateID"), rs.getString("serviceName"), rs.getString("fromCountry"), rs.getString("toCountry"), rs.getDouble("peak"), rs.getDouble("offPeak"), rs.getDate("changeDate"));
-                ret.add(rateTmp);
+                CallingCode country = new CallingCode(rs.getInt("countryCode"), rs.getString("countryName"));
+                ret.add(country);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            close(ps);
             close(rs);
+        }
+        return ret;
+    }
+
+    public List<Service> getServices() {
+        List<Service> ret = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "select * from service";
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                if (ret == null) {
+                    ret = new ArrayList();
+                }
+                Service service = new Service(rs.getInt("serviceID"), rs.getString("serviceName"));
+                ret.add(service);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(ps);
+            close(rs);
+        }
+        return ret;
+    }
+
+    public CallingCode getCountry(String callingCode) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "select * from callingCode where countryCode = " + callingCode;
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                CallingCode code = new CallingCode(rs.getInt("countryCode"), rs.getString("countryName"));
+                return code;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(ps);
+            close(rs);
+        }
+        return null;
+    }
+
+    public Service getService(String serviceID) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "select * from service where serviceID = " + serviceID;
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Service service = new Service(rs.getInt("serviceID"), rs.getString("serviceName"));
+                return service;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(ps);
+            close(rs);
+        }
+        return null;
+    }
+
+    public String exportRate() {
+        String ret = null;
+        PreparedStatement ps = null;
+        final String sql = "EXEC dbo.exportCurrentRate";
+        try {
+            checkConn();
+            ps = preparedStatement(sql);
+            if (ps.executeUpdate() > 0) {
+                ret = "success";
+            }
+        } catch (Exception e) {
+            ret = e.getMessage();
+        } finally {
             close(ps);
         }
         return ret;
     }
 
-    public String exportRate(String serviceName, String fromCountry) {
+    public String addCustomer(Customer customer) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.exportCurrentRate " + serviceName + ", " + fromCountry;
+        final String sql = "EXEC dbo.addCustomer " + customer.getfName() + ", " + customer.getlName() + ", " + customer.getPhoneNo() + ", " + customer.getService().getServiceId() + ", " + customer.getAddress() + ", " + customer.getCountryCode().getCountryCode() + ", " + customer.getCustID() + ", " + 8;
         try {
             checkConn();
             ps = preparedStatement(sql);
