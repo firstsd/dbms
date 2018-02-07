@@ -15,20 +15,34 @@
 <body>
 <div class="main"><a href="http://localhost:8080">GO BACK</a></div>
 <div>
-    <h1>IMPORT RATE</h1>
+    <h1>UPDATE RATE</h1>
     <form action="/rate" method="post">
-        <input type="text" name="fromCountry" placeholder="From Country ..."/>
-        <input type="text" name="serviceName" placeholder="Service name ..."/>
-        <input type="submit" value="EXPORT DATA">
+        <input type="file" name="rateFile">
+        <input type="submit" value="IMPORT DATA" name="import">
     </form>
 </div>
+<br>
 <div>
     <h1>Export current Rates by creating Rate Sheet</h1>
     <form action="/rate" method="post">
-        <input type="text" name="fromCountry" placeholder="From Country ..."/>
-        <input type="text" name="serviceName" placeholder="Service name ..."/>
-        <input type="submit" value="EXPORT DATA">
+        <label>Calling from &nbsp;</label>
+        <select name="country">
+            <c:forEach var="country" items="${countries}">
+                <option value="${country.countryCode}"> ${country.countryName} </option>
+            </c:forEach>
+        </select><br>
+        <label>Services &nbsp;</label>
+        <select name="service">
+            <c:forEach var="item" items="${Service}">
+                <option value="${item.serviceId}"> ${item.serviceName} </option>
+            </c:forEach>
+        </select>
+        <input type="submit" value="EXPORT DATA" name="export">
     </form>
+    <div class='<c:choose>
+<c:when test="${errorType eq 1}">error</c:when>
+<c:otherwise>success</c:otherwise>
+</c:choose>'>${error} - ${filepath}</div>
 </div>
 <div class='<c:choose>
 <c:when test="${errorType eq 1}">error</c:when>

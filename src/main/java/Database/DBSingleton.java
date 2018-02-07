@@ -205,7 +205,7 @@ public class DBSingleton extends Database {
     public String exportTrafficSummary(String startDate, String endDate) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.generateTrafficSummary '" + startDate + "', '" + endDate+"'";
+        final String sql = "EXEC dbo.generateTrafficSummary '" + startDate + "', '" + endDate+"';";
         try {
             checkConn();
             ps = preparedStatement(sql);
