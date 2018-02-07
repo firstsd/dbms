@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.CallingCode;
+import entity.Rate;
+import entity.RateTmp;
 import entity.Staff;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -60,12 +63,36 @@ public class DBSingleton extends Database {
         return ret;
     }
 
+    public List<RateTmp> getRates() {
+        List<RateTmp> ret = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "SELECT rateID, s.serviceName, f.countryName AS fromCountry, d.countryName AS toCountry, peak, offPeak, changeDate FROM rate r, service s, callingCode f, callingCode d WHERE r.serviceID = s.serviceID and r.fromCode = f.countryCode and r.destCode = d.countryCode";
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                if (ret == null) {
+                    ret = new ArrayList<RateTmp>();
+                }
+                RateTmp rateTmp = new RateTmp(rs.getInt("rateID"), rs.getString("serviceName"), rs.getString("fromCountry"), rs.getString("toCountry"), rs.getDouble("peak"), rs.getDouble("offPeak"), rs.getDate("changeDate"));
+                ret.add(rateTmp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(rs);
+            close(ps);
+        }
+        return ret;
+    }
 
-
-    public String exportRate() {
+    public String exportRate(String serviceName, String fromCountry) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.exportCurrentRate";
+        final String sql = "EXEC dbo.exportCurrentRate " + serviceName + ", " + fromCountry;
         try {
             checkConn();
             ps = preparedStatement(sql);

@@ -1,7 +1,7 @@
 package Servlet;
 
-import Database.DBSingleton;
 import Database.DBSingletonFactory;
+import entity.RateTmp;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -14,25 +14,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @WebServlet(name = "RateServlet")
 public class RateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("rate.jsp");
-        dispatcher.forward(request, response);
-        String export = request.getParameter("export");
-//        DBSingletonFactory.getInstanceDB()
-        String filename = null;
-        if (export.equals("rate")) {
+        String fromCountry = request.getParameter("fromCountry");
+        String serviceName = request.getParameter("serviceName");
+        String lastFile = "c:/Users/SD/Desktop/Project/export/" + serviceName + "_" + fromCountry + ".xlsx";
+        String absoluteFile = "c:/Users/SD/Desktop/Project/export/rate.xlsx";
+        if (fromCountry != null && serviceName != null) {
             // workbook
             Workbook wb = new XSSFWorkbook();
             // sheet
@@ -43,35 +40,41 @@ public class RateServlet extends HttpServlet {
             Cell cell1 = row1.createCell(0);
             Cell cell2 = row1.createCell(1);
             Cell cell3 = row1.createCell(2);
-            Cell cell4 = row1.createCell(3);
-            Cell cell5 = row1.createCell(4);
-            Cell cell6 = row1.createCell(5);
-            Cell cell7 = row1.createCell(6);
-            cell1.setCellValue("rateID");
-            cell2.setCellValue("serviceID");
-            cell3.setCellValue("fromCode");
-            cell4.setCellValue("destCode");
-            cell5.setCellValue("peak");
-            cell6.setCellValue("offPeak");
-            cell7.setCellValue("changeDate");
+            cell1.setCellValue("toCountry");
+            cell2.setCellValue("peak");
+            cell3.setCellValue("offPeak");
             try {
-                filename = "c:/Users/SD/Desktop/Project/export/rate.xlsx";
-                FileOutputStream fileOut = new FileOutputStream(filename);
+                FileOutputStream fileOut = new FileOutputStream(absoluteFile);
                 wb.write(fileOut);
                 fileOut.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println(filename);
-            String result = DBSingletonFactory.getInstanceDB().exportRate();
-            System.out.println(result);
-            if (result.equals("success")) {
+            System.out.println(absoluteFile);
+            String result = DBSingletonFactory.getInstanceDB().exportRate(serviceName, fromCountry);
+            if (result == null) {
+                File oldFile = new File(absoluteFile);
+                oldFile.delete();
+                request.setAttribute("error", "There is no records found");
+                request.setAttribute("errorType", 1);
+            } else if (result.equals("success")) {
+                File oldFile = new File(absoluteFile);
+                File destFile = new File(lastFile);
+                oldFile.renameTo(destFile);
                 request.setAttribute("error", "File exported successfully!!");
+                request.setAttribute("errorType", 0);
+                request.setAttribute("filepath", lastFile);
             } else {
                 request.setAttribute("error", result);
             }
-        } else {
-
         }
+        doGet(request, response);
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<RateTmp> rateTmpList = DBSingletonFactory.getInstanceDB().getRates();
+        request.setAttribute("rateTmpList", rateTmpList);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("rate.jsp");
+        dispatcher.forward(request, response);
     }
 }
