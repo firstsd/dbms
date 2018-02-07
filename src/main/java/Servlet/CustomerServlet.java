@@ -49,8 +49,10 @@ public class CustomerServlet extends HttpServlet {
 
         List<Service> service = DBSingletonFactory.getInstanceDB().getServices();
         List<CallingCode> countries = DBSingletonFactory.getInstanceDB().getCountries();
+        List<Customer> customers = DBSingletonFactory.getInstanceDB().getCustomers();
         request.setAttribute("Service", service);
         request.setAttribute("countries", countries);
+        request.setAttribute("customers", customers);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("customer.jsp");
         dispatcher.forward(request, response);

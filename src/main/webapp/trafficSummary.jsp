@@ -9,11 +9,13 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
 </head>
 <body>
+<div class="main"><a href="http://localhost:8080">GO BACK</a></div>
 <form method="post" action="">
     <fieldset>
-        <legend>Generate Traffic Summary</legend>
+        <legend><h3>Generate Traffic Summary</h3></legend>
         <label>Start date &nbsp;</label>
         <input type="text" placeholder="YYYY-MM-DD"><br>
         <label>End date &nbsp;</label>

@@ -29,7 +29,31 @@ public class DBSingleton extends Database {
             connect();
         }
     }
-
+    public List<Customer> getCustomers(){
+        List<Customer> ret = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "select * from customer";
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                if (ret == null) {
+                    ret = new ArrayList();
+                }
+                Customer customer = new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
+                ret.add(customer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(ps);
+            close(rs);
+        }
+        return ret;
+    }
     public List<Staff> getStaffs() {
         List<Staff> ret = null;
         PreparedStatement ps = null;

@@ -23,6 +23,10 @@
         <servlet-name>Rate servlet</servlet-name>
         <servlet-class>Servlet.RateServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Traffic summary</servlet-name>
+        <servlet-class>Servlet.TrafficSummary</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Customer servlet</servlet-name>
         <url-pattern>/customer</url-pattern>
@@ -38,5 +42,9 @@
     <servlet-mapping>
         <servlet-name>Rate servlet</servlet-name>
         <url-pattern>/rate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Traffic summary</servlet-name>
+        <url-pattern>/trafficSummary</url-pattern>
     </servlet-mapping>
 </web-app>
