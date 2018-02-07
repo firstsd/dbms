@@ -12,8 +12,8 @@
         <servlet-class>Servlet.CustomerServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Report servlet</servlet-name>
-        <servlet-class>Servlet.ReportServlet</servlet-class>
+        <servlet-name>Process call servlet</servlet-name>
+        <servlet-class>Servlet.ProcessCallServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Bill servlet</servlet-name>
@@ -32,8 +32,8 @@
         <url-pattern>/customer</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Report servlet</servlet-name>
-        <url-pattern>/report</url-pattern>
+        <servlet-name>Process call servlet</servlet-name>
+        <url-pattern>/processcall</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Bill servlet</servlet-name>
