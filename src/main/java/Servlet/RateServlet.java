@@ -27,7 +27,7 @@ public class RateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String fromCountry = request.getParameter("fromCountry");
         String serviceName = request.getParameter("serviceName");
-        String lastFile = "c:/Users/SD/Desktop/Project/export/" + serviceName + "_" + fromCountry + ".xlsx";
+        String lastFile = "d:/Users/SD/Desktop/Project/export/" + serviceName + "_" + fromCountry + ".xlsx";
         String absoluteFile = "c:/Users/SD/Desktop/Project/export/rate.xlsx";
         if (fromCountry != null && serviceName != null) {
             // workbook

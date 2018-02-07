@@ -202,6 +202,24 @@ public class DBSingleton extends Database {
         return ret;
     }
 
+    public String exportTrafficSummary(String startDate, String endDate) {
+        String ret = null;
+        PreparedStatement ps = null;
+        final String sql = "EXEC dbo.generateTrafficSummary '" + startDate + "', '" + endDate+"'";
+        try {
+            checkConn();
+            ps = preparedStatement(sql);
+            if (ps.executeUpdate() > 0) {
+                ret = "success";
+            }
+        } catch (Exception e) {
+            ret = e.getMessage();
+        } finally {
+            close(ps);
+        }
+        return ret;
+    }
+
     public String exportRate(String serviceName, String fromCountry) {
         String ret = null;
         PreparedStatement ps = null;

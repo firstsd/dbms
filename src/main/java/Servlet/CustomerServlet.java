@@ -34,6 +34,7 @@ public class CustomerServlet extends HttpServlet {
         Customer customer = new Customer(staffID, firstName, lastName, phone, service, address, country);
         String checkStatus = DBSingletonFactory.getInstanceDB().addCustomer(customer);
         System.out.println(checkStatus);
+        doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
