@@ -29,7 +29,8 @@ public class DBSingleton extends Database {
             connect();
         }
     }
-    public List<Customer> getCustomers(){
+
+    public List<Customer> getCustomers() {
         List<Customer> ret = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -54,6 +55,7 @@ public class DBSingleton extends Database {
         }
         return ret;
     }
+
     public List<Staff> getStaffs() {
         List<Staff> ret = null;
         PreparedStatement ps = null;
@@ -205,7 +207,7 @@ public class DBSingleton extends Database {
     public String exportTrafficSummary(String startDate, String endDate) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.generateTrafficSummary '" + startDate + "', '" + endDate+"';";
+        final String sql = "EXEC dbo.generateTrafficSummary '" + startDate + "', '" + endDate + "';";
         try {
             checkConn();
             ps = preparedStatement(sql);
@@ -220,10 +222,10 @@ public class DBSingleton extends Database {
         return ret;
     }
 
-    public String exportRate(String serviceName, String fromCountry) {
+    public String exportRate(Integer serviceID, Integer fromCountryID) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.exportCurrentRate " + serviceName + ", " + fromCountry;
+        final String sql = "EXEC dbo.exportCurrentRate " + serviceID + ", " + fromCountryID;
         try {
             checkConn();
             ps = preparedStatement(sql);
@@ -232,6 +234,44 @@ public class DBSingleton extends Database {
             }
         } catch (Exception e) {
             ret = e.getMessage();
+        } finally {
+            close(ps);
+        }
+        return ret;
+    }
+
+    public String maintainRate() {
+        String ret = null;
+        PreparedStatement ps = null;
+        final String sql = "EXEC dbo.maintainRate";
+        try {
+            checkConn();
+            ps = preparedStatement(sql);
+            if (ps.executeUpdate() > 0) {
+                ret = "success";
+            }
+        } catch (Exception e) {
+            ret = e.getMessage();
+        } finally {
+            close(ps);
+        }
+        return ret;
+    }
+
+    public String updateRate(String filename, String tablename, String sheetName) {
+        String ret = null;
+        PreparedStatement ps = null;
+        final String sql = "EXEC dbo.importExcel_to_SQL '" + sheetName + "$', '" + filename + "', '" + tablename + "'";
+        try {
+            checkConn();
+            ps = preparedStatement(sql);
+            ret = sql;
+            if (ps.executeUpdate() > 0) {
+                ret = "success";
+            }
+        } catch (Exception e) {
+//            ret = e.getMessage();
+            ret = sql;
         } finally {
             close(ps);
         }

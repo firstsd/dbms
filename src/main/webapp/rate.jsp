@@ -20,6 +20,11 @@
         <input type="file" name="rateFile">
         <input type="submit" value="IMPORT DATA" name="import">
     </form>
+    <div class='<c:choose>
+<c:when test="${importErrorType eq 1}">error</c:when>
+<c:otherwise>success</c:otherwise>
+</c:choose>'>${importError} - ${filepath}</div>
+</div>
 </div>
 <br>
 <div>
@@ -43,33 +48,28 @@
 <c:when test="${errorType eq 1}">error</c:when>
 <c:otherwise>success</c:otherwise>
 </c:choose>'>${error} - ${filepath}</div>
-</div>
-<div class='<c:choose>
-<c:when test="${errorType eq 1}">error</c:when>
-<c:otherwise>success</c:otherwise>
-</c:choose>'>${error} - ${filepath}</div>
-<h1>Rate List</h1>
-<table border="1" cellpadding="5" cellspacing="1">
-    <tr bgcolor="#EDEDED">
-        <td>rateID</td>
-        <td>serviceName</td>
-        <td>fromCountry</td>
-        <td>destCountry</td>
-        <td>peak</td>
-        <td>offPeak</td>
-        <td>changeDate</td>
-    </tr>
-    <c:forEach var="ratetmp" items="${rateTmpList}">
-        <tr>
-            <td>${ratetmp.rateID}</td>
-            <td>${ratetmp.serviceName}</td>
-            <td>${ratetmp.sourceName}</td>
-            <td>${ratetmp.destName}</td>
-            <td>${ratetmp.peak}</td>
-            <td>${ratetmp.offPeak}</td>
-            <td>${ratetmp.changeDate}</td>
+    <h1>Rate List</h1>
+    <table border="1" cellpadding="5" cellspacing="1">
+        <tr bgcolor="#EDEDED">
+            <td>rateID</td>
+            <td>serviceName</td>
+            <td>fromCountry</td>
+            <td>destCountry</td>
+            <td>peak</td>
+            <td>offPeak</td>
+            <td>changeDate</td>
         </tr>
-    </c:forEach>
-</table>
+        <c:forEach var="ratetmp" items="${rateTmpList}">
+            <tr>
+                <td>${ratetmp.rateID}</td>
+                <td>${ratetmp.serviceName}</td>
+                <td>${ratetmp.sourceName}</td>
+                <td>${ratetmp.destName}</td>
+                <td>${ratetmp.peak}</td>
+                <td>${ratetmp.offPeak}</td>
+                <td>${ratetmp.changeDate}</td>
+            </tr>
+        </c:forEach>
+    </table>
 </body>
 </html>
