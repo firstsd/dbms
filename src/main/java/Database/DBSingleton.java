@@ -56,6 +56,67 @@ public class DBSingleton extends Database {
         return ret;
     }
 
+    public Customer getCustomer(String phonNo) {
+        Customer ret = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "SELECT firstName, lastName, address, phoneNo FROM customer WHERE phoneNo=" + phonNo;
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Customer customer = new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(ps);
+            close(rs);
+        }
+        return ret;
+    }
+
+    public Integer amountDue(String phoneNo, String startDate,  String endDate){
+        Integer ret = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final String sql = "SELECT\n" +
+                "\tsum(\n" +
+                "\t\tCASE\n" +
+                "\t\tWHEN calltime BETWEEN pt.peakPeriodStart\n" +
+                "\t\tAND pt.offPeakPeriodStart THEN\n" +
+                "\t\t\tr.peak * duration / 60\n" +
+                "\t\tELSE\n" +
+                "\t\t\tr.offPeak * duration / 60\n" +
+                "\t\tEND\n" +
+                "\t) AS amountDue\n" +
+                "FROM\n" +
+                "\tcalls ca, customer cu, callingCode co, service s, peakTime pt,\n" +
+                "(   select * from rate t1  where t1.changeDate in (\n" +
+                "select MAX(changeDate) from rate t2 where t1.destCode =t2.destCode and t1.fromcode=t2.fromcode and t1.serviceId=t2.serviceId)) r\n" +
+                "WHERE\n" +
+                "\tca.fromPhoneNo = cu.phoneNo AND ca.toCode = co.countryCode AND s.serviceID = cu.serviceID AND cu.phoneNo = "+phoneNo+"\n" +
+                "AND ca.fromCode = pt.countryCode AND cu.serviceID = pt.serviceID AND r.serviceID = cu.serviceID AND r.fromCode = ca.fromCode\n" +
+                "AND ca.toCode = r.destCode AND ca.callDate BETWEEN "+startDate+" AND "+endDate+" ORDER BY 1";
+        List<Object> params = new ArrayList<Object>();
+        try {
+            checkConn();
+            ps = preparedStatement(sql, params.toArray());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                ret =  rs.getInt("amountDue");//new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(ps);
+            close(rs);
+        }
+        return ret;
+    }
+
     public List<Staff> getStaffs() {
         List<Staff> ret = null;
         PreparedStatement ps = null;
@@ -266,10 +327,10 @@ public class DBSingleton extends Database {
         return ret;
     }
 
-    public String maintainRate() {
+    public String createBill(String phone, String startDate, String endDate) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.maintainRate";
+        final String sql = "EXEC dbo.generateCustomerBill"+phone+", "+startDate+", "+endDate;
         try {
             checkConn();
             ps = preparedStatement(sql);

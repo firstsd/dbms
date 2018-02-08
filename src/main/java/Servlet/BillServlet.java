@@ -1,5 +1,8 @@
 package Servlet;
 
+import Database.DBSingletonFactory;
+import entity.Customer;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +17,10 @@ public class BillServlet extends HttpServlet {
         String phoneNo = request.getParameter("phoneNo");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
+
+        DBSingletonFactory.getInstanceDB().createBill(phoneNo,startDate, endDate);
+        Customer customer = DBSingletonFactory.getInstanceDB().getCustomer(phoneNo);
+        Integer amountDue = DBSingletonFactory.getInstanceDB().amountDue(phoneNo, startDate, endDate);
 
         System.out.println( phoneNo +" " +startDate +" "+ endDate);
         doGet(request,response);
