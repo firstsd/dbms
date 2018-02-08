@@ -65,7 +65,7 @@ public class DBSingleton extends Database {
             ps = preparedStatement(sql, phoneNo);
             rs = ps.executeQuery();
             while (rs.next()) {
-                ret= new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
+                ret = new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class DBSingleton extends Database {
         return ret;
     }
 
-    public Double amountDue(String phoneNo, String startDate,  String endDate){
+    public Double amountDue(String phoneNo, String startDate, String endDate) {
         Double ret = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -104,7 +104,7 @@ public class DBSingleton extends Database {
             ps = preparedStatement(sql, phoneNo, startDate, endDate);
             rs = ps.executeQuery();
             while (rs.next()) {
-                ret =  rs.getDouble("amountDue");//new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
+                ret = rs.getDouble("amountDue");//new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -346,7 +346,7 @@ public class DBSingleton extends Database {
     public String createBill(String phone, String startDate, String endDate) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.generateCustomerBill"+phone+", "+startDate+", "+endDate;
+        final String sql = "EXEC dbo.generateCustomerBill " + phone + ", '" + startDate + "', '" + endDate + "'";
         try {
             checkConn();
             ps = preparedStatement(sql);
@@ -365,7 +365,7 @@ public class DBSingleton extends Database {
         String ret = null;
         Statement st = null;
         PreparedStatement cs = null;
-       final String sql = "EXEC dbo.importExcel_to_SQL 'Sheet1', 'calls'";
+        final String sql = "EXEC dbo.importExcel_to_SQL 'Sheet1', 'calls'";
 //        final String sql = "exec importExcel_to_SQL ?, ?, ?";
         try {
             checkConn();
