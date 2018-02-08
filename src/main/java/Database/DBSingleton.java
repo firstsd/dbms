@@ -1,8 +1,6 @@
 package Database;
 
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -248,6 +246,24 @@ public class DBSingleton extends Database {
         return ret;
     }
 
+    public String exportSalesRepCommission(String startDate, String endDate) {
+        String ret = null;
+        PreparedStatement ps = null;
+        final String sql = "EXEC dbo.generateSalesRepCommission '" + startDate + "', '" + endDate + "';";
+        try {
+            checkConn();
+            ps = preparedStatement(sql);
+            if (ps.executeUpdate() > 0) {
+                ret = "success";
+            }
+        } catch (Exception e) {
+            ret = e.getMessage();
+        } finally {
+            close(ps);
+        }
+        return ret;
+    }
+
     public String exportRate(Integer serviceID, Integer fromCountryID) {
         String ret = null;
         PreparedStatement ps = null;
@@ -286,19 +302,23 @@ public class DBSingleton extends Database {
 
     public String updateRate(String filename, String tablename, String sheetName) {
         String ret = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        final String sql = "exec dbo.importExcel_to_SQL " + sheetName + "$, '" + filename + "', " + tablename + ";";
+        Statement st = null;
+        PreparedStatement cs = null;
+       final String sql = "EXEC dbo.importExcel_to_SQL 'Sheet1', 'calls'";
+//        final String sql = "exec importExcel_to_SQL ?, ?, ?";
         try {
             checkConn();
-            ret = sql;
-            ps = preparedStatement(sql);
-            int a = ps.executeUpdate();
-                ret += String.valueOf(a);
+            cs = preparedStatement(sql);
+//            cs.setString(1, sheetName);
+//            cs.setString(2, "'" + filename + "'");
+//            cs.setString(3, tablename);
+            int a = cs.executeUpdate();
+            ret = sql + "return: " + a;
         } catch (Exception e) {
+            e.printStackTrace();
             ret = e.getMessage();
         } finally {
-            close(ps);
+            close(cs);
         }
         return ret;
     }
