@@ -65,6 +65,7 @@ public class TrafficSummary extends HttpServlet {
             } else {
                 request.setAttribute("error", result);
             }
+            wb.close();
         }
         doGet(request, response);
     }

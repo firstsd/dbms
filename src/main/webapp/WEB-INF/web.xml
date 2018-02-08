@@ -27,6 +27,10 @@
         <servlet-name>Traffic summary</servlet-name>
         <servlet-class>Servlet.TrafficSummary</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Commision</servlet-name>
+        <servlet-class>Servlet.Commision</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Customer servlet</servlet-name>
         <url-pattern>/customer</url-pattern>
@@ -46,5 +50,9 @@
     <servlet-mapping>
         <servlet-name>Traffic summary</servlet-name>
         <url-pattern>/trafficSummary</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Commision</servlet-name>
+        <url-pattern>/calculateCommision</url-pattern>
     </servlet-mapping>
 </web-app>
