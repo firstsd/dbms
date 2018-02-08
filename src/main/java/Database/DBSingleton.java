@@ -307,7 +307,10 @@ public class DBSingleton extends Database {
     public String addCustomer(Customer customer) {
         String ret = null;
         PreparedStatement ps = null;
-        final String sql = "EXEC dbo.addCustomer " + customer.getfName() + ", " + customer.getlName() + ", " + customer.getPhoneNo() + ", " + customer.getService().getServiceId() + ", " + customer.getAddress() + ", " + customer.getCountryCode().getCountryCode() + ", " + customer.getCustID() + ", " + 8;
+        final String sql = "EXEC dbo.addCustomer " + customer.getfName() + ", " +
+                customer.getlName() + ", " + customer.getPhoneNo() + ", " +
+                customer.getService().getServiceId() + ", '" + customer.getAddress() + "', " +
+                customer.getCountryCode().getCountryCode() + ", " + customer.getCustID() + ", " + 8;
         try {
             checkConn();
             ps = preparedStatement(sql);
