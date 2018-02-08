@@ -33,36 +33,36 @@ public class RateServlet extends HttpServlet {
         String importBtn = request.getParameter("import");
         List<String> errorList = new ArrayList<String>();
 
-        if (importBtn != null) {
-            String rateFile = request.getParameter("rateFile");
-            String path = "d:\\data\\import\\";
-            String fullpath = path + rateFile;
-            DBSingletonFactory.getInstanceDB().maintainRate();
-            try {
-                // Creating a Workbook from an Excel file (.xls or .xlsx)
-                Workbook workbook = WorkbookFactory.create(new File(fullpath));
-                for (Sheet sheet : workbook) {
-                    System.out.println("=> " + sheet.getSheetName());
-                    String result = DBSingletonFactory.getInstanceDB().updateRate(fullpath, "rate", sheet.getSheetName());
-                    if (result == null) {
-                        errorList.add(result);
-                        request.setAttribute("importError", "There is no records found");
-                        request.setAttribute("importErrorType", 1);
-                    } else if (result.equals("success")) {
-                        errorList.add(result);
-                        request.setAttribute("importError", "File exported successfully!!");
-                        request.setAttribute("importErrorType", 0);
-                    } else {
-                        errorList.add(result);
-                        request.setAttribute("importError", result);
-                    }
-                }
-                System.out.println(errorList);
-            } catch (InvalidFormatException e) {
-                e.printStackTrace();
-            }
-            doGet(request, response);
-        }
+//        if (importBtn != null) {
+//            String rateFile = request.getParameter("rateFile");
+//            String path = "d:\\data\\import\\";
+//            String fullpath = path + rateFile;
+//            DBSingletonFactory.getInstanceDB().maintainRate();
+//            try {
+//                // Creating a Workbook from an Excel file (.xls or .xlsx)
+//                Workbook workbook = WorkbookFactory.create(new File(fullpath));
+//                for (Sheet sheet : workbook) {
+//                    System.out.println("=> " + sheet.getSheetName());
+//                    String result = DBSingletonFactory.getInstanceDB().updateRate(fullpath, "rate", sheet.getSheetName());
+//                    if (result == null) {
+//                        errorList.add(result);
+//                        request.setAttribute("importError", "There is no records found");
+//                        request.setAttribute("importErrorType", 1);
+//                    } else if (result.equals("success")) {
+//                        errorList.add(result);
+//                        request.setAttribute("importError", "File exported successfully!!");
+//                        request.setAttribute("importErrorType", 0);
+//                    } else {
+//                        errorList.add(result);
+//                        request.setAttribute("importError", result);
+//                    }
+//                }
+//                System.out.println(errorList);
+//            } catch (InvalidFormatException e) {
+//                e.printStackTrace();
+//            }
+//            doGet(request, response);
+//        }
 
         if (exportBtn != null) {
             String fromCountry = request.getParameter("country");

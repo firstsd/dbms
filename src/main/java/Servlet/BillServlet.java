@@ -20,9 +20,12 @@ public class BillServlet extends HttpServlet {
 
         DBSingletonFactory.getInstanceDB().createBill(phoneNo,startDate, endDate);
         Customer customer = DBSingletonFactory.getInstanceDB().getCustomer(phoneNo);
-        Integer amountDue = DBSingletonFactory.getInstanceDB().amountDue(phoneNo, startDate, endDate);
+        Double amountDue = DBSingletonFactory.getInstanceDB().amountDue(phoneNo, startDate, endDate);
 
+        System.out.println(customer.getfName());
         System.out.println( phoneNo +" " +startDate +" "+ endDate);
+
+        System.out.println(amountDue);
         doGet(request,response);
     }
 

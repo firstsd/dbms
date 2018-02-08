@@ -54,18 +54,18 @@ public class DBSingleton extends Database {
         return ret;
     }
 
-    public Customer getCustomer(String phonNo) {
+    public Customer getCustomer(String phoneNo) {
         Customer ret = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        final String sql = "SELECT firstName, lastName, address, phoneNo FROM customer WHERE phoneNo=" + phonNo;
+        final String sql = "SELECT * FROM customer WHERE phoneNo= ?";
         List<Object> params = new ArrayList<Object>();
         try {
             checkConn();
-            ps = preparedStatement(sql, params.toArray());
+            ps = preparedStatement(sql, phoneNo);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Customer customer = new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
+                ret= new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,8 +76,8 @@ public class DBSingleton extends Database {
         return ret;
     }
 
-    public Integer amountDue(String phoneNo, String startDate,  String endDate){
-        Integer ret = null;
+    public Double amountDue(String phoneNo, String startDate,  String endDate){
+        Double ret = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         final String sql = "SELECT\n" +
@@ -95,16 +95,16 @@ public class DBSingleton extends Database {
                 "(   select * from rate t1  where t1.changeDate in (\n" +
                 "select MAX(changeDate) from rate t2 where t1.destCode =t2.destCode and t1.fromcode=t2.fromcode and t1.serviceId=t2.serviceId)) r\n" +
                 "WHERE\n" +
-                "\tca.fromPhoneNo = cu.phoneNo AND ca.toCode = co.countryCode AND s.serviceID = cu.serviceID AND cu.phoneNo = "+phoneNo+"\n" +
+                "\tca.fromPhoneNo = cu.phoneNo AND ca.toCode = co.countryCode AND s.serviceID = cu.serviceID AND cu.phoneNo = ?\n" +
                 "AND ca.fromCode = pt.countryCode AND cu.serviceID = pt.serviceID AND r.serviceID = cu.serviceID AND r.fromCode = ca.fromCode\n" +
-                "AND ca.toCode = r.destCode AND ca.callDate BETWEEN "+startDate+" AND "+endDate+" ORDER BY 1";
+                "AND ca.toCode = r.destCode AND ca.callDate BETWEEN ? AND ? ORDER BY 1";
         List<Object> params = new ArrayList<Object>();
         try {
             checkConn();
-            ps = preparedStatement(sql, params.toArray());
+            ps = preparedStatement(sql, phoneNo, startDate, endDate);
             rs = ps.executeQuery();
             while (rs.next()) {
-                ret =  rs.getInt("amountDue");//new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
+                ret =  rs.getDouble("amountDue");//new Customer(rs.getInt("custID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("phoneNo"), getService(rs.getString("serviceID")), rs.getString("address"), getCountry(rs.getString("countryCode")));
             }
         } catch (Exception e) {
             e.printStackTrace();
