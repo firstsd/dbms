@@ -9,8 +9,22 @@
 <html>
 <head>
     <title>Bill</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
 </head>
 <body>
-
+<div class="main"><a href="http://localhost:8080">GO BACK</a></div>
+<div>
+    <form method="post" action="/bill">
+        <fieldset>
+            <legend><h3>ADD CUSTOMER</h3></legend>
+            <input type="text" placeholder="Customer phone number" name="phoneNo"><br>
+            <label>Start date</label>
+            <input type="text" placeholder="YYYY-MM-DD" name="startDate"><br>
+            <label>End date</label>
+            <input type="text" placeholder="YYYY-MM-DD" name="endDate"><br>
+            <input type="submit" value="Create bill">
+        </fieldset>
+    </form>
+</div>
 </body>
 </html>
