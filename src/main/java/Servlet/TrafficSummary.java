@@ -23,7 +23,7 @@ public class TrafficSummary extends HttpServlet {
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
 
-        String lastFile = "D:/data/export/" + startDate + "_" + endDate + ".xlsx";
+        String lastFile = "D:/data/export/trafficSummary_" + startDate + "_" + endDate + ".xlsx";
         String absoluteFile = "D:/data/export/traffic.xlsx";
         if (startDate != null && endDate != null) {
             // workbook
